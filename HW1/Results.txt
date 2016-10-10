@@ -1,0 +1,6 @@
+Complete set with 60000 training data ==> Count: 10000 Error : 309
+Random set with 10000 training data ==> Count: 9998 Error : 1002
+Mean_Outlier set with 10000 training data ==> Count: 9998 Error : 923
+Mean_Close set with 10000 training data ==> Count: 9998 Error : 921
+Mean_Hop set with 10000 training data ==> Count: 9998 Error : 946
+Hop_Cluster with 10000 training data ==> Count: 9998 Error : 989
