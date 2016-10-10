@@ -143,7 +143,7 @@ def main():
                         "mean_hop", "hop_cluster"]
     for M in prototype_size:
         for algo in select_algorithm:
-            train_image_prototype, train_label_prototype = \Algo
+            train_image_prototype, train_label_prototype = \
                 prototype_select(train_images, train_labels, M, algo)
             neigh = KNeighborsClassifier(n_neighbors=1)
             neigh.fit(train_image_prototype, train_label_prototype)
