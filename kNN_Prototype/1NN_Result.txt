@@ -24,3 +24,11 @@
 10000		mean_hop		19.89%
 10000		hop_cluster		21.03%
 15000		random		4.61%
+15000		mean_close		19.26%
+15000		mean_outlier		19.44%
+15000		mean_hop		18.94%
+15000		hop_cluster		18.3%
+20000		random		4.42%
+20000		mean_close		18.84%
+20000		mean_outlier		18.04%
+20000		mean_hop		17.74%
