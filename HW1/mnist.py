@@ -6,6 +6,7 @@ from numpy import *
 from numpy import array, int8, uint8, zeros
 from sklearn.neighbors import KNeighborsClassifier
 from scipy.spatial import distance
+import warnings
 
 
 def load_mnist(dataset="training", digits=np.arange(10), path=""):
@@ -27,6 +28,7 @@ def load_mnist(dataset="training", digits=np.arange(10), path=""):
         raise ValueError("dataset must be 'testing' or 'training'")
 
     flbl = open(fname_lbl, 'rb')
+    magic_nr, size = struct.unpack(">II", flbl.read(8))
     lbl = pyarray("b", flbl.read())
     flbl.close()
 
@@ -52,7 +54,6 @@ def calculate_distance(image1,  image2):
 
 
 def prototype_select(train_images, train_labels, prototype_size, technique="random"):
-
     prototype_image = np.empty((1, train_images.shape[1]), int)
     prototype_label = np.empty((1, train_labels.shape[1]), int)
 
@@ -133,11 +134,26 @@ def prototype_select(train_images, train_labels, prototype_size, technique="rand
     return prototype_image,prototype_label
 
 
-def main():
-
-    train_images, train_labels = load_mnist('training', digits=[1,2,3,4,5,6,7,8,9,0])
+def evaluate_classifier(train_images, train_labels):
     test_images, test_labels = load_mnist('testing', digits = [1,2,3,4,5,6,7,8,9,0])
+    neigh = KNeighborsClassifier(n_neighbors=1)
+    neigh.fit(train_images, train_labels.ravel())
+    count = 0.0
+    error = 0.0
+    for index in range(test_labels.size):
+        predict = neigh.predict(test_images[index])
+        answer = test_labels[index]
+        if predict != answer:
+            error += 1.0
+        count += 1.0
+    return str((error/count)*100) + "%"
 
+
+def main():
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    train_images, train_labels = load_mnist('training', digits=[1,2,3,4,5,6,7,8,9,0])
+    #  Baseline Classifier with complete Training set
+    # error = evaluate_classifier(train_images, train_labels)
     prototype_size = [1000,3000,5000,7000,10000,15000,20000]
     select_algorithm = ["random", "mean_close", "mean_outlier",
                         "mean_hop", "hop_cluster"]
@@ -145,18 +161,11 @@ def main():
         for algo in select_algorithm:
             train_image_prototype, train_label_prototype = \
                 prototype_select(train_images, train_labels, M, algo)
-            neigh = KNeighborsClassifier(n_neighbors=1)
-            neigh.fit(train_image_prototype, train_label_prototype)
-            count = 0.0
-            error = 0.0
-            for index in range(test_labels.size):
-                if (neigh.predict(test_images[index]) == test_labels[index]):
-                    error += 1.0
-                count += 1.0
+            error = evaluate_classifier(train_image_prototype,
+                                        train_label_prototype)
             with open("1NN_Result.txt", "a") as myfile:
-                result = "Prototype size:\t" + str(M) + "\tAlgorithm:\t" + \
-                         str(algo) + "\tError:\t" + str(error) + "\tTotal:\t" \
-                         + str(count) +"\n"
+                result = str(M) + "\t\t" + \
+                         str(algo) + "\t\t" + str(error) +"\n"
                 print result
                 myfile.write(result)
 

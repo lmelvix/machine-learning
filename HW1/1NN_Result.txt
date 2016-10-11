@@ -1,35 +1,26 @@
-Prototype size:	1000	Algorithm:	random	Error:	967.0	Total:	9998.0
-Prototype size:	1000	Algorithm:	mean_close	Error:	946.0	Total:	9998.0
-Prototype size:	1000	Algorithm:	mean_outlier	Error:	968.0	Total:	9998.0
-Prototype size:	1000	Algorithm:	mean_hop	Error:	921.0	Total:	9998.0
-Prototype size:	1000	Algorithm:	hop_cluster	Error:	899.0	Total:	9998.0
-Prototype size:	3000	Algorithm:	random	Error:	1002.0	Total:	9998.0
-Prototype size:	3000	Algorithm:	mean_close	Error:	932.0	Total:	9998.0
-Prototype size:	3000	Algorithm:	mean_outlier	Error:	970.0	Total:	9998.0
-Prototype size:	3000	Algorithm:	mean_hop	Error:	919.0	Total:	9998.0
-Prototype size:	3000	Algorithm:	hop_cluster	Error:	929.0	Total:	9998.0
-Prototype size:	5000	Algorithm:	random	Error:	1013.0	Total:	9998.0
-Prototype size:	5000	Algorithm:	mean_close	Error:	920.0	Total:	9998.0
-Prototype size:	5000	Algorithm:	mean_outlier	Error:	947.0	Total:	9998.0
-Prototype size:	5000	Algorithm:	mean_hop	Error:	939.0	Total:	9998.0
-Prototype size:	5000	Algorithm:	hop_cluster	Error:	953.0	Total:	9998.0
-Prototype size:	7000	Algorithm:	random	Error:	1008.0	Total:	9998.0
-Prototype size:	7000	Algorithm:	mean_close	Error:	905.0	Total:	9998.0
-Prototype size:	7000	Algorithm:	mean_outlier	Error:	917.0	Total:	9998.0
-Prototype size:	7000	Algorithm:	mean_hop	Error:	944.0	Total:	9998.0
-Prototype size:	7000	Algorithm:	hop_cluster	Error:	928.0	Total:	9998.0
-Prototype size:	10000	Algorithm:	random	Error:	988.0	Total:	9998.0
-Prototype size:	10000	Algorithm:	mean_close	Error:	923.0	Total:	9998.0
-Prototype size:	10000	Algorithm:	mean_outlier	Error:	923.0	Total:	9998.0
-Prototype size:	10000	Algorithm:	mean_hop	Error:	944.0	Total:	9998.0
-Prototype size:	10000	Algorithm:	hop_cluster	Error:	987.0	Total:	9998.0
-Prototype size:	15000	Algorithm:	random	Error:	1004.0	Total:	9998.0
-Prototype size:	15000	Algorithm:	mean_close	Error:	922.0	Total:	9998.0
-Prototype size:	15000	Algorithm:	mean_outlier	Error:	937.0	Total:	9998.0
-Prototype size:	15000	Algorithm:	mean_hop	Error:	934.0	Total:	9998.0
-Prototype size:	15000	Algorithm:	hop_cluster	Error:	942.0	Total:	9998.0
-Prototype size:	20000	Algorithm:	random	Error:	1029.0	Total:	9998.0
-Prototype size:	20000	Algorithm:	mean_close	Error:	940.0	Total:	9998.0
-Prototype size:	20000	Algorithm:	mean_outlier	Error:	955.0	Total:	9998.0
-Prototype size:	20000	Algorithm:	mean_hop	Error:	973.0	Total:	9998.0
-Prototype size:	20000	Algorithm:	hop_cluster	Error:	926.0	Total:	9998.0
+1000		random		11.66%
+1000		mean_close		24.0%
+1000		mean_outlier		23.78%
+1000		mean_hop		25.37%
+1000		hop_cluster		24.32%
+3000		random		7.96%
+3000		mean_close		23.21%
+3000		mean_outlier		22.44%
+3000		mean_hop		23.77%
+3000		hop_cluster		23.61%
+5000		random		6.77%
+5000		mean_close		21.99%
+5000		mean_outlier		22.09%
+5000		mean_hop		22.92%
+5000		hop_cluster		22.99%
+7000		random		6.11%
+7000		mean_close		21.13%
+7000		mean_outlier		20.97%
+7000		mean_hop		22.15%
+7000		hop_cluster		22.84%
+10000		random		5.36%
+10000		mean_close		20.31%
+10000		mean_outlier		20.04%
+10000		mean_hop		19.89%
+10000		hop_cluster		21.03%
+15000		random		4.61%
