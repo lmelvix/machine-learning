@@ -192,7 +192,7 @@ def main():
     #  Baseline Classifier with complete Training set
     # error = evaluate_classifier(train_images, train_labels)
 
-    prototype_size = [1000,3000,5000,7000,10000,15000,20000]
+    prototype_size = [15000, 20000]
     select_algorithm = ["random", "mean_close", "mean_outlier",
                         "mean_hop", "hop_cluster"]
     for M in prototype_size:
