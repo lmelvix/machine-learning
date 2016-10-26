@@ -55,16 +55,25 @@ def main():
         category_dict[category] = data_filter.build_vocab(mycategory_data.data)
 
     log_vocab_prob = {}
+    num_vocab_keys = float(len(overall_vocabulary.keys()))
+
+    print "\n"
     for category in overall_train_categories:
         log_vocab_prob[category] = {}
-        print "Building log of word probabilities for " + str(category)
+        print "Applying Laplace smoothening " + str(category)
         for term in category_dict[category]:
-            log_vocab_prob[category][term] = \
-                np.log(float(category_dict[category][term] + 1.0)
-                       /float(overall_vocabulary[term] + float(len(overall_vocabulary.keys()))))
+            log_vocab_prob[category][term] = ((category_dict[category][term] + 1.0)/(overall_vocabulary[term] + num_vocab_keys))
 
-    print "COMPLETED !!"
-    print log_vocab_prob['alt.atheism']['crawford']
+    print "\n"
+    for category in overall_train_categories:
+        print "Taking log of probabilities for " + str(category)
+        for term, prob in log_vocab_prob[category].iteritems():
+            log_vocab_prob[category][term] = np.log(prob)
+
+    print "COMPLETED !!\n"
+    for term,prob in log_vocab_prob['alt.atheism'].iteritems():
+        print str(term) + " : " + str(prob)
+
 
 if __name__ == "__main__" :
     main()
