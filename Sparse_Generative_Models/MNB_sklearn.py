@@ -27,8 +27,6 @@ class NewsGroup(object):
         f_score = metrics.f1_score(test_label, prediction, average='macro')
         return f_score
 
-    def calculate_probability(self, train_):
-
 
 def main():
     newsgroup = NewsGroup()
