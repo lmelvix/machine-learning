@@ -1,4 +1,3 @@
-import MNB_sklearn as mnb
 import numpy as np
 from collections import defaultdict
 
@@ -29,51 +28,35 @@ class DataFilter(object):
                         temp_dict[term] += 1.0
         for key in vocabulary.keys():
             vocabulary[key] += temp_dict[key]
-
         return vocabulary
 
-def main():
+    def category_vocab(self,extractor, categories, type):
+        category_dict = {}
+        for category in categories:
+            print "Extracting " + str(category)
+            mycategory_data = extractor.extract_data(type, [category])
+            print "Building vocabulary for " + str(category)
+            category_dict[category] = self.build_vocab(mycategory_data.data)
+        return category_dict
 
-    extractor = mnb.NewsGroup()
-    data_filter = DataFilter()
+    def laplace_smoothen(self, num_vocab_keys, categories,
+                         overall_vocabulary, category_dict):
+        log_vocab_prob = {}
+        for category in categories:
+            log_vocab_prob[category] = {}
+            print "Applying Laplace smoothening " + str(category)
+            for term in category_dict[category]:
+                log_vocab_prob[category][term] = \
+                    ((category_dict[category][term] + 1.0)/
+                     (overall_vocabulary[term] + num_vocab_keys))
+        return log_vocab_prob
 
-    print "Extracting complete dataset.."
-    overall_train_data = extractor.extract_data('train', None)
-    overall_train_categories = overall_train_data.target_names
-
-    print "Computing PI probability for categories.."
-    pi_document = data_filter.compute_pi(overall_train_data.target)
-
-    print "Building overall vocabulary"
-    overall_vocabulary = data_filter.build_vocab(overall_train_data.data)
-
-    category_dict = {}
-    for category in overall_train_categories:
-        print "Extracting " + str(category)
-        mycategory_data = extractor.extract_data('train', [category])
-        print "Building vocabulary for " + str(category)
-        category_dict[category] = data_filter.build_vocab(mycategory_data.data)
-
-    log_vocab_prob = {}
-    num_vocab_keys = float(len(overall_vocabulary.keys()))
-
-    print "\n"
-    for category in overall_train_categories:
-        log_vocab_prob[category] = {}
-        print "Applying Laplace smoothening " + str(category)
-        for term in category_dict[category]:
-            log_vocab_prob[category][term] = ((category_dict[category][term] + 1.0)/(overall_vocabulary[term] + num_vocab_keys))
-
-    print "\n"
-    for category in overall_train_categories:
-        print "Taking log of probabilities for " + str(category)
-        for term, prob in log_vocab_prob[category].iteritems():
-            log_vocab_prob[category][term] = np.log(prob)
-
-    print "COMPLETED !!\n"
-    for term,prob in log_vocab_prob['alt.atheism'].iteritems():
-        print str(term) + " : " + str(prob)
+    def convert_log_prob(self, categories, log_vocab_prob):
+        for category in categories:
+            print "Taking log of probabilities for " + str(category)
+            for term, prob in log_vocab_prob[category].iteritems():
+                log_vocab_prob[category][term] = np.log(prob)
+        return log_vocab_prob
 
 
-if __name__ == "__main__" :
-    main()
+
