@@ -13,8 +13,19 @@ class DataFilter(object):
 
         for key in pi_labels.keys():
             pi_labels[key] = pi_labels[key]/total_documents
-
         return pi_labels
+
+    def build_document_vocab(self, data):
+        vocabulary = {}
+        temp_dict = defaultdict(float)
+        vocab_file = open('vocabulary.txt').read()
+        for term in vocab_file.split():
+            vocabulary[term] = 1.0
+        for term in data.split():
+            temp_dict[term] += 1.0
+        for key in vocabulary.keys():
+            vocabulary[key] = vocabulary[key] + temp_dict[key]
+        return vocabulary
 
     def build_vocab(self, data):
         vocabulary = {}
