@@ -6,11 +6,9 @@ class DataFilter(object):
     def compute_pi(self, labels):
         pi_labels = defaultdict(int)
         total_documents = 0.0
-
         for label in labels:
             pi_labels[label] += 1.0
             total_documents += 1.0
-
         for key in pi_labels.keys():
             pi_labels[key] = pi_labels[key]/total_documents
         return pi_labels

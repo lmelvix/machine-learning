@@ -36,7 +36,6 @@ class MNB_Classifier(object):
         self.log_vocab_prob = self.data_filter.convert_log_prob(
             self.overall_train_categories,
             self.vocab_prob)
-
         print "**Training Complete**\n"
 
     def test_mnb_classifier(self):
@@ -68,8 +67,6 @@ class MNB_Classifier(object):
             total_prediction += 1.0
         print "Error : " + str(error) + "\t Total : " + str(total_prediction)
         print "Error Rate : " + str(error/total_prediction)
-
-
 
 
 def main():
