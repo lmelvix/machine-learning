@@ -46,20 +46,30 @@ class MNB_Classifier(object):
         self.test_labels = self.test_data.target
 
         print "**Predicting Test Data**"
+        error = 0.0
+        total_prediction = 0.0
+
         for index in range(len(self.test_data.data)):
             test_vocab = self.data_filter.build_document_vocab(self.test_data.data[index])
             test_category_prob = {}
             for category in self.overall_train_categories:
                 temp_probability = 1.0
                 for term in test_vocab.keys():
-                    temp_probability += self.log_vocab_prob[category][term] * (test_vocab[term])
+                    temp_probability += self.log_vocab_prob[category][term] * (test_vocab[term]-1)
                 temp_probability += np.log(self.pi_document[self.overall_train_categories.index(category)])
                 test_category_prob[category] = temp_probability
-            print test_category_prob
             predict_category = max(test_category_prob.iteritems(), key=operator.itemgetter(1))[0]
             test_category_prob.clear()
+
             print str(predict_category) + "||" + \
                   str(self.test_data.target_names[self.test_data.target[index]-1])
+            if(predict_category != self.test_data.target_names[self.test_data.target[index]]):
+                error += 1.0
+            total_prediction += 1.0
+        print "Error : " + str(error) + "\t Total : " + str(total_prediction)
+        print "Error Rate : " + str(error/total_prediction)
+
+
 
 
 def main():
