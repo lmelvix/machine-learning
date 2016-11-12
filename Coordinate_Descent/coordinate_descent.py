@@ -45,8 +45,6 @@ class CoordinateDescent(object):
     def random_descent(self):
 
         prob_coord = np.array((1./13)*self.feature_index)
-        prob_coord[0] = 1
-        prob_coord[1:] = 
         print np.random.choice(np.arange(13), p=prob_coord)
 
 
