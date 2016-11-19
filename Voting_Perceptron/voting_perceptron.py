@@ -153,15 +153,15 @@ class KernelPerceptron(VotingPerceptron):
 
 def main():
     iterations = 1000
-    data_file = ReadFile('data2.txt')
-    # vperceptron = VotingPerceptron()
-    # vperceptron.computeConfidence(iterations, data_file.train_input)
-    # vperceptron.plotConfidence()
-    # vperceptron.plotResult(data_file.train_input, 'result')
+    data_file = ReadFile('data1.txt')
+    vperceptron = VotingPerceptron()
+    vperceptron.computeConfidence(iterations, data_file.train_input)
+    vperceptron.plotConfidence()
+    vperceptron.plotResult(data_file.train_input, 'result')
 
-    kperceptron = KernelPerceptron()
-    kperceptron.computeConfidence(iterations, data_file.phi_input)
-    kperceptron.plotConfidence()
+    # kperceptron = KernelPerceptron()
+    # kperceptron.computeConfidence(iterations, data_file.phi_input)
+    # kperceptron.plotConfidence()
     # kperceptron.plotResult(data_file.phi_input, 'result')
 
 if __name__ == "__main__":
