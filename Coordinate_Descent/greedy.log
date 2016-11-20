@@ -1,0 +1,101 @@
+[[ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 1.  0.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  1.  0.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]
+ [ 0.  0.  1.]]
+Logistic Regression Prediction Accuracy : [50]
+Accuracy after 0 Iterations: 35  Likelihood: 140.62237295
+Accuracy after 20 Iterations: 48  Likelihood: 111.29401399
+Accuracy after 40 Iterations: 49  Likelihood: 95.1725071743
+Accuracy after 60 Iterations: 48  Likelihood: 83.7693096062
+Accuracy after 80 Iterations: 49  Likelihood: 75.2261091656
+Accuracy after 100 Iterations: 49  Likelihood: 68.5905718277
+Accuracy after 120 Iterations: 49  Likelihood: 63.3189742483
+Accuracy after 140 Iterations: 49  Likelihood: 59.0299258178
+Accuracy after 160 Iterations: 49  Likelihood: 55.4765225144
+Accuracy after 180 Iterations: 49  Likelihood: 52.482138479
+Accuracy after 200 Iterations: 49  Likelihood: 49.9220415882
+Accuracy after 220 Iterations: 49  Likelihood: 47.7060650978
+Accuracy after 240 Iterations: 49  Likelihood: 45.7678101319
+Accuracy after 260 Iterations: 49  Likelihood: 44.0535959923
+Accuracy after 280 Iterations: 49  Likelihood: 42.5180490622
+Accuracy after 300 Iterations: 49  Likelihood: 41.1268533811
+Accuracy after 320 Iterations: 49  Likelihood: 39.8584823101
+Accuracy after 340 Iterations: 49  Likelihood: 38.6978284179
+Accuracy after 360 Iterations: 49  Likelihood: 37.6281882303
+Accuracy after 380 Iterations: 49  Likelihood: 36.6355321692
+Accuracy after 400 Iterations: 49  Likelihood: 35.7120361785
+Accuracy after 420 Iterations: 49  Likelihood: 34.8501843329
+Accuracy after 440 Iterations: 49  Likelihood: 34.043918292
+Accuracy after 460 Iterations: 49  Likelihood: 33.2870495949
+Accuracy after 480 Iterations: 49  Likelihood: 32.575751613
+Accuracy after 500 Iterations: 49  Likelihood: 31.9057109804
+Accuracy after 520 Iterations: 49  Likelihood: 31.2732673291
+Accuracy after 540 Iterations: 49  Likelihood: 30.6753067048
+Accuracy after 560 Iterations: 50  Likelihood: 30.1089956797
+Accuracy after 580 Iterations: 50  Likelihood: 29.5709432767
+Accuracy after 600 Iterations: 50  Likelihood: 29.0588066949
+Accuracy after 620 Iterations: 50  Likelihood: 28.5709299097
+Accuracy after 640 Iterations: 50  Likelihood: 28.1057262327
+Accuracy after 660 Iterations: 50  Likelihood: 27.6612089037
+Accuracy after 680 Iterations: 50  Likelihood: 27.2364943383
+Accuracy after 700 Iterations: 50  Likelihood: 26.830052977
+Accuracy after 720 Iterations: 50  Likelihood: 26.44054711
+Accuracy after 740 Iterations: 50  Likelihood: 26.0671928313
+Accuracy after 760 Iterations: 50  Likelihood: 25.7088526808
+Accuracy after 780 Iterations: 50  Likelihood: 25.3646001855
+Accuracy after 800 Iterations: 50  Likelihood: 25.0336422662
+Accuracy after 820 Iterations: 50  Likelihood: 24.7151894576
+Accuracy after 840 Iterations: 50  Likelihood: 24.4086444161
+Accuracy after 860 Iterations: 50  Likelihood: 24.1130429867
+Accuracy after 880 Iterations: 50  Likelihood: 23.8280314128
+Accuracy after 900 Iterations: 50  Likelihood: 23.5531411891
+Accuracy after 920 Iterations: 50  Likelihood: 23.2873714767
+Accuracy after 940 Iterations: 50  Likelihood: 23.0306432249
+Accuracy after 960 Iterations: 50  Likelihood: 22.7824845811
+Accuracy after 980 Iterations: 50  Likelihood: 22.5423491248
