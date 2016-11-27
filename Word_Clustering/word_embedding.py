@@ -1,9 +1,12 @@
+import os, sys
 import nltk
 import itertools
 import string
+import warnings
 import numpy as np
 from nltk.corpus import brown, stopwords
 from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 
 
 class WordEmbeddingsUtil(object):
@@ -62,12 +65,26 @@ class WordEmbeddingsUtil(object):
     def load_dict_file(filename):
         return np.load(filename).item()
 
+
 class WordCluster(object):
 
     @staticmethod
     def pca_dim_reduce(phi_vector, reduce_dim):
-        pca = PCA(n_components=reduce_dim).fit(phi_vector)
+        pca = PCA(n_components=reduce_dim).fit_transform(phi_vector)
+        return pca
 
+    @staticmethod
+    def kmeans_clustering(vector, cluster_size):
+        kmeans = KMeans(n_clusters=cluster_size).fit(vector)
+        return kmeans
+
+    @staticmethod
+    def cosine_dist(vector1, vector2):
+        vector1 = np.asarray(vector1)
+        vector2 = np.asarray(vector2)
+        distance = 1.0 - (np.dot(vector1.T, vector2)) / (np.linalg.norm(
+            vector1) * np.linalg.norm(vector2))
+        return distance
 
 
 def main():
@@ -75,10 +92,11 @@ def main():
     common_count = 1000
     vocab_count = 5000
     reduced_dim = 100
-
+    cluster_size = 100
     dict_file = 'vocab_dict.npy'
     reuse_prob_dict = True
     we = WordEmbeddingsUtil()
+    wc = WordCluster()
 
     # Get Brown corpus words
     print "Get Brown corpus words"
@@ -136,23 +154,55 @@ def main():
             else:
                 log_cw_c = np.log(prob_common_given_vocab[(
                     word,common)]/prob_common[common])
-            phi_vocab[word].append(max(0,log_cw_c))
+            phi_vocab[word].append(max(0, log_cw_c))
 
+    # Converting dictionary to list for dimensionality reduction
+    print "Converting dictionary to list"
     word_list = []
     vector_list = []
-    #TODO: Figure out how to concatenate arrays vertically !!
     for word, vector in phi_vocab.iteritems():
-        if len(word_list) == 0:
-            word_list = word
-            vector_list = vector
-        else:
-            word_list = np.append(word_list, word, axis = 0)
-            vector_list = np.append(vector_list, vector, axis = 0)
+        word_list.append(word)
+        vector_list.append(vector)
 
-    print len(word_list)
-    print len(vector_list)
+    # Applying PCA for dimensionality reduction
+    print "Applying PCA"
+    reduced_vector = wc.pca_dim_reduce(vector_list, reduced_dim)
+
+    # Cluster the reduced vector using K-Means Clustering
+    print "Applying K Means Clustering"
+    kmeans = wc.kmeans_clustering(reduced_vector, cluster_size)
+
+    # Grouping vocabulary based on clusters
+    print "Grouping vocabulary based on labels"
+    word_clusters = {}
+    for idx in xrange(len(kmeans.labels_)):
+        if kmeans.labels_[idx] not in word_clusters.keys():
+            word_clusters[kmeans.labels_[idx]] = [word_list[idx]]
+        else:
+            word_clusters[kmeans.labels_[idx]].append(word_list[idx])
+
+    test_words = ['communism', 'autumn', 'cigarette', 'pulmonary',
+                  'mankind', 'africa', 'chicago', 'revolution', 'september',
+                  'chemical', 'detergent', 'dictionary', 'storm', 'worship']
+
+    # Finding Nearest neighbour for list of test words
+    print "Finding nearest neighbour for test words"
+    for test_word in test_words:
+        test_label = kmeans.predict(reduced_vector[word_list.index(test_word)])
+        min_dist = sys.maxint
+        close_word = 'NONE'
+        cluster_words = word_clusters[test_label[0]]
+        for cluster_word in cluster_words:
+            dist = wc.cosine_dist(reduced_vector[word_list.index(test_word)],
+                                  reduced_vector[word_list.index(cluster_word)])
+            if (dist < min_dist) and (cluster_word != test_word):
+                min_dist = dist
+                close_word = cluster_word
+        print str(test_word) + " is closest to " + str(close_word)
+
     print "Completed.."
 
 if __name__ == "__main__":
+    warnings.filterwarnings('ignore')
     main()
 
