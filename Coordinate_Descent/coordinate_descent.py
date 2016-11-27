@@ -2,11 +2,14 @@ import os, sys
 import math
 import numpy as np
 from numpy import linalg as LA
+import sklearn
 from sklearn import linear_model
 from sklearn.linear_model import SGDClassifier
+from sklearn import preprocessing
 import warnings
 import random
 
+ERR_THRESH = 0.0001
 
 class CoordinateDescent(object):
 
@@ -17,13 +20,16 @@ class CoordinateDescent(object):
         file = np.concatenate((file,ones),axis=1)
         self.num_labels = 3
 
-        train_target = file[0:49,0]
-        train_target = np.append(train_target, file[59:119,0])
-        train_target = np.append(train_target, file[130:166,0])
+        train_target = file[0:42,0]
+        train_target = np.append(train_target, file[60:112,0])
+        train_target = np.append(train_target, file[130:164,0])
 
-        test_target = file[49:59,0]
-        test_target = np.append(test_target, file[119:130,0])
-        test_target = np.append(test_target, file[166:,0])
+        test_target = file[42:60,0]
+        test_target = np.append(test_target, file[112:130,0])
+        test_target = np.append(test_target, file[164:,0])
+
+        train_target = train_target
+        test_target = test_target
 
         self.train_label = np.zeros((train_target.shape[0], 3))
         self.test_label = np.zeros((test_target.shape[0],3))
@@ -31,72 +37,97 @@ class CoordinateDescent(object):
         self.test_targets = test_target
 
         for row in range(train_target.shape[0]):
-            self.train_label[row,(train_target[row]-1)] = 1
+            self.train_label[row,(train_target[row] - 1)] = 1
         for row in range(test_target.shape[0]):
-            self.test_label[row,(test_target[row]-1)] = 1
+            self.test_label[row,(test_target[row] - 1)] = 1
 
-        self.train_features = np.vstack((file[0:49,1:]))
-        self.train_features = np.vstack((self.train_features, file[59:119,1:]))
-        self.train_features = np.vstack((self.train_features, file[130:166,1:]))
+        self.train_features = np.vstack((file[0:42,1:]))
+        self.train_features = np.vstack((self.train_features, file[60:112,1:]))
+        self.train_features = np.vstack((self.train_features, file[130:164,1:]))
 
-        self.test_features = file[49:59,1:]
-        self.test_features = np.vstack((self.test_features, file[119:130,1:]))
-        self.test_features = np.vstack((self.test_features, file[166:,1:]))
+        self.test_features = file[42:60,1:]
+        self.test_features = np.vstack((self.test_features, file[112:130,1:]))
+        self.test_features = np.vstack((self.test_features, file[164:,1:]))
 
         self.feature_index = np.ones(self.train_features.shape[1])
+        # self.weight = np.zeros((3,14))
+        self.weight = np.random.randn(3,14)
 
-    def predict_function(self, weight, feature):
-        wx_dot = (np.dot(weight,feature))
-        prob_x = [math.exp(x) for x in wx_dot]
-        tot_prob = np.sum(prob_x)
-        prob_x = [x/tot_prob for x in prob_x]
-        return np.argmax(prob_x)
+    def pre_process(self):
+        # self.train_features[:,:13] = (self.train_features[:,:13] -
+        #         np.mean(self.train_features[:,:13],
+        #             0))/np.std(self.train_features[:,:13], 0)
+        # self.test_features[:, :13] = (self.test_features[:,:13] -
+        #         np.mean(self.test_features[:,:13],
+        #             0))/np.std(self.test_features[:,:13], 0)
 
-    def loss_function(self, weight, feature, target):
-        wx_dot = (np.dot(weight,feature))
-        # print str(feature) + " " + str(weight) + " " + str(wx_dot)
-        # print str(wx_dot)
-
-        prob_x = [math.exp(x) for x in wx_dot]
-        tot_prob = np.sum(prob_x)
-
-        prob_x = [x/tot_prob for x in prob_x]
-        log_loss = -1*math.log(prob_x[int(target)-1])
-        return log_loss
-
+        # self.train_features.astype(np.float32)
+        # self.test_features.astype(np.float32)
+        self.train_features[:, :13] = preprocessing.scale(self.train_features[:, :13])
+        self.test_features[:, :13]  = preprocessing.scale(self.test_features[:, :13])
+        print self.test_features
+    
     def logistic_regression(self):
-        log_reg = linear_model.LogisticRegression(solver="lbfgs", multi_class= 'multinomial')
+        log_reg = linear_model.LogisticRegression(solver="sag", multi_class= 'multinomial', C=100000)
         log_reg.fit(self.train_features, self.train_targets)
-        overall_loss = 0
-        for data in range(self.test_label.shape[0]):
-            overall_loss += self.loss_function(
-                      log_reg.coef_, self.test_features[data], self.test_targets[data])
-        print "Logistic Regression Prediction Loss : " + str(overall_loss)
+        accuracy = 0    
+        y_pred = []
+        for index in range(self.train_label.shape[0]):
+            prediction = log_reg.predict(self.train_features[index])
+            y_pred.append(prediction)
+            accuracy += (prediction == self.train_targets[index])
+        # print log_reg.predict_proba(self.train_features)
+        # print y_pred, self.train_targets
+        log_loss_ = self.train_label.shape[0] * sklearn.metrics.log_loss(self.train_targets, log_reg.predict_proba(self.train_features))
+        print "SKLearn Log Loss: ", log_loss_
 
-    def random_descent(self,learning_rate, iterations):
-        random_weight = np.zeros((3,14))
+        #print "Logistic Regression Prediction Accuracy : " + str(accuracy) + "
+        #Log-Likelihood: ", str(log_loss)
+
+    def compute_gradient(self):
+        wx_dot = np.dot(self.weight, np.transpose(self.train_features))
+        self.prob_x = np.exp(wx_dot)
+        tot_prob = np.sum(self.prob_x, 0)
+        self.prob_x /= tot_prob
+        self.gradient = np.dot(np.transpose(self.train_label) - self.prob_x, self.train_features)
+
+    def random_descent(self, learning_rate, iterations, method="random"):
         for iter_count in range(iterations):
-            rand_col = np.random.choice(np.arange(14))
-            rand_row = np.random.choice(np.arange(3))
-            overall_loss = 0
-            for data in range(self.train_targets.shape[0]):
-                loss = self.loss_function(random_weight,
-                                          self.train_features[data],
-                                          self.train_targets[data])
-                random_weight[rand_row][rand_col] = random_weight[rand_row][rand_col] +\
-                                                    learning_rate * loss
-                overall_loss += loss
+            self.compute_gradient()
+            if method == "random":
+                rand_col = np.random.choice(np.arange(14))
+                rand_row = np.random.choice(np.arange(3))
+            elif method == "greedy":
+                rand_col = np.argmax(self.gradient) % 14
+                rand_row = np.argmax(self.gradient) / 14
+            self.weight[rand_row][rand_col] = self.weight[rand_row][rand_col] +\
+                                                    learning_rate * self.gradient[rand_row][rand_col]
+            curr_cost = 0
+            if iter_count % 20 == 0:
+                prev_cost = curr_cost if iter_count > 0 else None
+                for idx in range(self.train_features.shape[0]):
+                    curr_cost += -1.0 * np.log(self.prob_x[self.train_targets[idx]-1][idx])
+                if prev_cost is not None and (abs(prev_cost - curr_cost) < ERR_THRESH):
+                    return
+                print "Accuracy after " + str(iter_count) + " Iterations: " + str(self.predict()) + "  Loss: " + str(curr_cost)
+        return
 
-            if iter_count % 10 == 0:
-                print "Iteration : " + str(iter_count) + " Loss : " + \
-                      str(overall_loss)
-
+    def predict(self):
+        wx_predict = np.dot(self.weight, np.transpose(self.test_features))
+        predict = np.exp(wx_predict)
+        predict_label = np.argmax(predict, axis = 0)
+        accuracy = np.sum(predict_label == self.test_targets-1)
+        return accuracy
 
 def main():
     warnings.filterwarnings('ignore')
     coord_descent = CoordinateDescent('wine.data.txt')
+    coord_descent.pre_process()
     coord_descent.logistic_regression()
-    coord_descent.random_descent(0.001,1000)
+
+    coord_descent.compute_gradient()
+    coord_descent.random_descent(0.01, 50000, method="random")
+    coord_descent.predict()
 
 if __name__ == "__main__":
     main()
